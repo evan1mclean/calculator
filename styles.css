@@ -11,4 +11,24 @@ body {
 .calculator {
     height: 70%;
     width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 30px;
 }
+
+.screen {
+    height: 20%;
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.btn {
+    text-align: center;
+    padding: 10px;
+}
+
