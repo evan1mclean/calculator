@@ -1,0 +1,14 @@
+* {
+    border: 1px solid red;
+}
+body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calculator {
+    height: 70%;
+    width: 50%;
+}
