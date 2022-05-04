@@ -1,4 +1,4 @@
-/* * {
+/* *{
     border: 1px solid red;
 } */
 
@@ -72,5 +72,28 @@ body {
 .btn:active {
     transform: translate(1%, 1%);
     border: 1px solid black;
+}
+
+.operator {
+    background-color: #65c8cf;
+}
+
+.operator:hover {
+    background-color: #99e3e8;
+}
+
+.btn sup {
+    transform: translate(0%, -40%);
+    font-size: 0.6em;
+}
+
+#clear,
+#backspace {
+    background-color: #e35c5d;
+}
+
+#clear:hover,
+#backspace:hover {
+    background-color: #ea8080;
 }
 
