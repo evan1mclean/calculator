@@ -1,5 +1,8 @@
-//Global variable to store current number clicked
-let currentNumber;
+//Global variables
+let currentDigit;
+let displayValue;
+let currentOperator;
+let display = document.querySelector('.displayValue');
 
 //Next four functions do basic math and return values
 function add(num1, num2) {
@@ -38,29 +41,35 @@ function operate(operator, num1, num2) {
     return result;
 }
 
+//Sets event listeners for each of the buttons
 function setButtonListeners() {
     let numbers = document.querySelectorAll('.number');
+    let operators = document.querySelectorAll('.operator');
     numbers.forEach(button => {
         button.addEventListener('click', function(e) {
             getNumberFromButton(e);
-            displayNumber(currentNumber);
+            displayNumber(currentDigit);
         });
-    })
+    });
+    operators.forEach(button => {
+        button.addEventListener('click', function(e) {
+            getOperator(e);
+        });
+    });
 }
 
 //gets number from button clicked and returns the value
 function getNumberFromButton(e) {
-    currentNumber = e.target.textContent;
+    currentDigit = e.target.textContent;
     //checks for if decimal point was clicked
-    if (isNaN(currentNumber)) {
-        return currentNumber = ".";
+    if (isNaN(currentDigit)) {
+        return currentDigit = ".";
     }
-    return currentNumber;
+    return currentDigit;
 }
 
 //displays number on the screen
 function displayNumber(number) {
-    display = document.querySelector('.currentOperation');
     //checks to make sure there's only 1 decimal point in the number
     if (display.textContent.includes('.') && number === ".") {
         return;
@@ -73,6 +82,12 @@ function displayNumber(number) {
     else {
         display.textContent += number;
     }
+}
+
+//gets current operator from button clicked and stores the current display value
+function getOperator(e) {
+    displayValue = parseFloat(display.textContent);
+    currentOperator = e.target.getAttribute('id');
 }
 
 setButtonListeners();
