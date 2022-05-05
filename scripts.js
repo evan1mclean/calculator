@@ -1,9 +1,13 @@
 //Global variables
 let currentDigit;
-let displayValue;
-let currentOperator;
 let operatorClicked = false;
+let operation = {
+    num1: "",
+    operator: "",
+    num2: "",
+}
 let display = document.querySelector('.displayValue');
+let currentOperation = document.querySelector('.currentOperation');
 
 //Next four functions do basic math and return values
 //multiply and divide by 10 to deal with floating point precision
@@ -57,10 +61,12 @@ function setButtonListeners() {
     operators.forEach(button => {
         button.addEventListener('click', function(e) {
             getOperator(e);
-            displayOperation(displayValue);
+            displayOperation();
         });
     });
-    /* equals.addEventListener('click', equalsButton()); */
+    equals.addEventListener('click', function() { 
+        equalsButton();
+    });
 }
 
 //gets number from button clicked and returns the value
@@ -84,7 +90,7 @@ function displayNumber(number) {
         else {
             display.textContent += number;
         }
-        operatorClicked = false;
+        operation.num2 = parseFloat(display.textContent);
     }
     //checks to make sure you can't just append a bunch of zeros
     else if (display.textContent === "0" && number === "0") {
@@ -106,39 +112,46 @@ function displayNumber(number) {
     else {
         display.textContent += number;
     }
+    operatorClicked = false;
 }
 
 //gets current operator from button clicked and stores the current display value
 function getOperator(e) {
     operatorClicked = true;
-    displayValue = parseFloat(display.textContent);
-    currentOperator = e.target.getAttribute('id');
+    operation.num1 = parseFloat(display.textContent);
+    operation.operator = e.target.getAttribute('id');
 }
 
-function displayOperation(displayValue) {
-    let currentOperation = document.querySelector('.currentOperation');
-    switch (currentOperator) {
+function displayOperation() {
+    switch (operation.operator) {
         case "add":
-            currentOperation.textContent = `${displayValue} + `;
+            currentOperation.textContent = `${operation.num1} + `;
             break;
         case "subtract":
-            currentOperation.textContent = `${displayValue} - `;
+            currentOperation.textContent = `${operation.num1} - `;
             break;
         case "multiply":
-            currentOperation.textContent = `${displayValue} x `;
+            currentOperation.textContent = `${operation.num1} x `;
             break;
         case "divide":
-            currentOperation.textContent = `${displayValue} / `;
+            currentOperation.textContent = `${operation.num1} / `;
             break;
     }
 }
 
-/* function equalsButton(displayValue) {
-    let num1 = displayValue;
-    display.textContent = "";
-    let num2 = parseFloat(display.textContent);
-    if (num2 === "")
-    
-} */
+function equalsButton() {
+    operatorClicked = true;
+    currentOperation.textContent = "";
+    displayOperation();
+    currentOperation.textContent += `${operation.num2}`;
+    let result = operate(operation.operator,operation.num1, operation.num2);
+    if (typeof result == 'undefined') {
+        return;
+    }
+    else {
+        display.textContent = result;
+        operation.num1 = result;
+    }
+}
 
 setButtonListeners();
