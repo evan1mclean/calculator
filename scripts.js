@@ -5,12 +5,13 @@ let currentOperator;
 let display = document.querySelector('.displayValue');
 
 //Next four functions do basic math and return values
+//multiply and divide by 10 to deal with floating point precision
 function add(num1, num2) {
-    return num1 + num2;
+    return (num1 * 10 + num2 * 10)/10;
 }
 
 function subtract(num1, num2) {
-    return num1 - num2;
+    return (num1 * 10 - num2 * 10)/10;
 }
 
 function multiply(num1, num2) {
