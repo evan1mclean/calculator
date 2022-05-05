@@ -70,14 +70,22 @@ function getNumberFromButton(e) {
 
 //displays number on the screen
 function displayNumber(number) {
+    //checks to make sure you can't just append a bunch of zeros
+    if (display.textContent === "0" && number === "0") {
+        return;
+    }
     //checks to make sure there's only 1 decimal point in the number
-    if (display.textContent.includes('.') && number === ".") {
+    else if (display.textContent.includes('.') && number === ".") {
         return;
     }
     //beyond 14 digits the screen starts to get stretched out
     else if (display.textContent.length === 14) {
         alert("You have reached the calculator's display limit!");
         return;
+    }
+    //removes initial zero unless a decmial point is used
+    else if (display.textContent === "0" && number != ".") {
+        display.textContent = number;
     }
     else {
         display.textContent += number;
