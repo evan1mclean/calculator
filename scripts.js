@@ -122,6 +122,7 @@ function getOperator(e) {
     operation.operator = e.target.getAttribute('id');
 }
 
+//function to display the current operation on the upper part of the display screen
 function displayOperation() {
     switch (operation.operator) {
         case "add":
@@ -139,14 +140,36 @@ function displayOperation() {
     }
 }
 
+//function to make the equals button work
 function equalsButton() {
+    //allows the ability to repopulate the display correctly after clicking the equals button
     operatorClicked = true;
     currentOperation.textContent = "";
     displayOperation();
     currentOperation.textContent += `${operation.num2}`;
+    //if no num2 value is set, default to using num1 for both numbers
+    if (operation.num2 === "") {
+        operation.num2 = operation.num1;
+    }
     let result = operate(operation.operator,operation.num1, operation.num2);
+    //if equals button is clicked before an operator has, do nothing
     if (typeof result == 'undefined') {
         return;
+    }
+    //Rounds decimals to 7 digits
+    else if (result.toString().includes('.') && result.toString().length >= 10) {
+        display.textContent = result.toFixed(7);
+        operation.num1 = result.toFixed(7);
+    }
+    //Displays large numbers in scientific notation
+    else if (result.toString().length >= 10) {
+        display.textContent = result.toPrecision(5);
+        operation.num1 = result.toPrecision(5);
+    }
+    //Stops dividing by zero
+    else if (operation.operator === 'divide' && operation.num2 === 0) {
+        currentOperation.textContent = "Try a different divisor please";
+        alert("Please don't try dividing by zero again. It's just not goning to happen...");
     }
     else {
         display.textContent = result;
