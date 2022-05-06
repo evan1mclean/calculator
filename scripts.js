@@ -27,6 +27,14 @@ function divide(num1, num2) {
     return num1/num2;
 }
 
+function power(num1, num2) {
+    return Math.pow(num1, num2);
+}
+
+function squareRoot(num1) {
+    return Math.sqrt(num1);
+}
+
 //Determines which operator is used and calls the appropriate math function
 function operate(operator, num1, num2) {
     let result;
@@ -42,6 +50,12 @@ function operate(operator, num1, num2) {
             break;
         case "divide":
             result = divide(num1, num2);
+            break;
+        case "power":
+            result = power(num1, num2);
+            break;
+        case "square-root":
+            result = squareRoot(num1);
             break;
     }
     return result;
@@ -145,6 +159,12 @@ function displayOperation() {
         case "divide":
             currentOperation.textContent = `${operation.num1} / `;
             break;
+        case "power":
+            currentOperation.textContent = `${operation.num1} ^ `;
+            break;
+        case "square-root":
+            currentOperation.textContent = `SQRT(${operation.num1})`;
+            break;
     }
 }
 
@@ -154,7 +174,10 @@ function equalsButton() {
     operatorClicked = true;
     currentOperation.textContent = "";
     displayOperation();
-    currentOperation.textContent += `${operation.num2}`;
+    //Displays slightly differently for square root
+    if (operation.operator != "square-root") {
+        currentOperation.textContent += `${operation.num2}`;
+    }
     //if no num2 value is set, default to using num1 for both numbers
     if (operation.num2 === "") {
         operation.num2 = operation.num1;
