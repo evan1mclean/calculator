@@ -52,6 +52,7 @@ function setButtonListeners() {
     let numbers = document.querySelectorAll('.number');
     let operators = document.querySelectorAll('.operator');
     let equals = document.querySelector('#equals');
+    let clear = document.querySelector('#clear');
     numbers.forEach(button => {
         button.addEventListener('click', function(e) {
             getNumberFromButton(e);
@@ -67,6 +68,9 @@ function setButtonListeners() {
     equals.addEventListener('click', function() { 
         equalsButton();
     });
+    clear.addEventListener('click', function() {
+        clearButton();
+    })
 }
 
 //gets number from button clicked and returns the value
@@ -175,6 +179,14 @@ function equalsButton() {
         display.textContent = result;
         operation.num1 = result;
     }
+}
+
+function clearButton() {
+    display.textContent = "0";
+    currentOperation.textContent = "";
+    operation.num1 = "";
+    operation.num2 = "";
+    operation.operator = "";
 }
 
 setButtonListeners();
