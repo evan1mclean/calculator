@@ -53,6 +53,7 @@ function setButtonListeners() {
     let operators = document.querySelectorAll('.operator');
     let equals = document.querySelector('#equals');
     let clear = document.querySelector('#clear');
+    let backspace = document.querySelector('#backspace');
     numbers.forEach(button => {
         button.addEventListener('click', function(e) {
             getNumberFromButton(e);
@@ -70,6 +71,9 @@ function setButtonListeners() {
     });
     clear.addEventListener('click', function() {
         clearButton();
+    })
+    backspace.addEventListener('click', function() {
+        backspaceButton();
     })
 }
 
@@ -187,6 +191,17 @@ function clearButton() {
     operation.num1 = "";
     operation.num2 = "";
     operation.operator = "";
+}
+
+function backspaceButton() {
+    if (display.textContent === "0") {
+        return;
+    }
+    else {
+        let newDisplay = display.textContent.slice(0,-1);
+        display.textContent = newDisplay;
+        operation.num1 = parseFloat(newDisplay);
+    }
 }
 
 setButtonListeners();
