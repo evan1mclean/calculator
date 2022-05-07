@@ -1,6 +1,7 @@
 //Global variables
 let currentDigit;
 let clearDisplay = false;
+let operatorClickedAgain = 0;
 let operation = {
     num1: "",
     operator: "",
@@ -76,12 +77,23 @@ function setButtonListeners() {
     });
     operators.forEach(button => {
         button.addEventListener('click', function(e) {
+            operatorClickedAgain++;
+            getNumbersForCalculation();
+            //if operator is clicked more than once, operate on the numbers first
+            let result = operate(operation.operator,operation.num1, operation.num2);
+            if (operatorClickedAgain > 1) {
+                cleanResult(result);
+                operation.num1 = "";
+                operatorClickedAgain = 1;
+            }
+            clearDisplay = true;
             getOperator(e);
             getNumbersForCalculation();
             displayOperation();
         });
     });
     equals.addEventListener('click', function() { 
+        getNumbersForCalculation();
         equalsButton();
     });
     clear.addEventListener('click', function() {
@@ -139,7 +151,6 @@ function displayNumber(number) {
 
 //gets current operator from button clicked and stores the current display value
 function getOperator(e) {
-    clearDisplay = true;
     operation.operator = e.target.getAttribute('id');
 }
 
@@ -182,22 +193,24 @@ function equalsButton() {
     clearDisplay = true;
     currentOperation.textContent = "";
     displayOperation();
-    getNumbersForCalculation();
     //Displays slightly differently for square root
     if (operation.operator != "square-root") {
-        currentOperation.textContent += `${operation.num2}`;
-    }
-    //if no num2 value is set, default to using num1 for both numbers
-    if (operation.num2 === "") {
-        operation.num2 = operation.num1;
+        currentOperation.textContent += `${operation.num2} =`;
     }
     let result = operate(operation.operator,operation.num1, operation.num2);
     //if equals button is clicked before an operator has, do nothing
     if (typeof result == 'undefined') {
         return;
     }
+    cleanResult(result);
+    operation.num1 = "";
+    operatorClickedAgain = 0
+}
+
+//Takes the result and cleans the value so it fits on the display properly
+function cleanResult(result) {
     //Rounds decimals to 7 digits
-    else if (result.toString().includes('.') && result.toString().length >= 10) {
+    if (result.toString().includes('.') && result.toString().length >= 10) {
         display.textContent = result.toFixed(7);
         operation.num1 = result.toFixed(7);
     }
@@ -213,16 +226,17 @@ function equalsButton() {
     }
     else {
         display.textContent = result;
-        operation.num1 = result;
     }
 }
 
+//function that clears all values and sets the screen back to zero
 function clearButton() {
     display.textContent = "0";
     currentOperation.textContent = "";
     operation.num1 = "";
     operation.num2 = "";
     operation.operator = "";
+    operatorClickedAgain = 0;
 }
 
 function backspaceButton() {
