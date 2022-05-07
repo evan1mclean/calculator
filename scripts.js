@@ -1,6 +1,6 @@
 //Global variables
 let currentDigit;
-let operatorClicked = false;
+let clearDisplay = false;
 let operation = {
     num1: "",
     operator: "",
@@ -77,6 +77,7 @@ function setButtonListeners() {
     operators.forEach(button => {
         button.addEventListener('click', function(e) {
             getOperator(e);
+            getNumbersForCalculation();
             displayOperation();
         });
     });
@@ -103,7 +104,7 @@ function getNumberFromButton(e) {
 
 //displays number on the screen
 function displayNumber(number) {
-    if (operatorClicked) {
+    if (clearDisplay) {
         display.textContent = "";
         //properly displays decimal if decimal is clicked after operator
         if (number === "." && display.textContent === "") {
@@ -112,7 +113,6 @@ function displayNumber(number) {
         else {
             display.textContent += number;
         }
-        operation.num2 = parseFloat(display.textContent);
     }
     //checks to make sure you can't just append a bunch of zeros
     else if (display.textContent === "0" && number === "0") {
@@ -134,14 +134,22 @@ function displayNumber(number) {
     else {
         display.textContent += number;
     }
-    operatorClicked = false;
+    clearDisplay = false;
 }
 
 //gets current operator from button clicked and stores the current display value
 function getOperator(e) {
-    operatorClicked = true;
-    operation.num1 = parseFloat(display.textContent);
+    clearDisplay = true;
     operation.operator = e.target.getAttribute('id');
+}
+
+function getNumbersForCalculation() {
+    if (operation.num1 === "") {
+        operation.num1 = parseFloat(display.textContent);
+    }
+    else {
+        operation.num2 = parseFloat(display.textContent);
+    }
 }
 
 //function to display the current operation on the upper part of the display screen
@@ -171,9 +179,10 @@ function displayOperation() {
 //function to make the equals button work
 function equalsButton() {
     //allows the ability to repopulate the display correctly after clicking the equals button
-    operatorClicked = true;
+    clearDisplay = true;
     currentOperation.textContent = "";
     displayOperation();
+    getNumbersForCalculation();
     //Displays slightly differently for square root
     if (operation.operator != "square-root") {
         currentOperation.textContent += `${operation.num2}`;
