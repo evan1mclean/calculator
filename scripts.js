@@ -243,10 +243,13 @@ function backspaceButton() {
     if (display.textContent === "0") {
         return;
     }
+    else if (display.textContent.length === 1) {
+        display.textContent = "0";
+    }
     else {
         let newDisplay = display.textContent.slice(0,-1);
         display.textContent = newDisplay;
-        operation.num1 = parseFloat(newDisplay);
+        getNumbersForCalculation();
     }
 }
 
