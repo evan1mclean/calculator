@@ -69,6 +69,7 @@ function setButtonListeners() {
     let equals = document.querySelector('#equals');
     let clear = document.querySelector('#clear');
     let backspace = document.querySelector('#backspace');
+    window.addEventListener('keydown', getKeyboardInputs);
     numbers.forEach(button => {
         button.addEventListener('click', function(e) {
             getNumberFromButton(e);
@@ -76,21 +77,7 @@ function setButtonListeners() {
         });
     });
     operators.forEach(button => {
-        button.addEventListener('click', function(e) {
-            operatorClickedAgain++;
-            getNumbersForCalculation();
-            //if operator is clicked more than once, operate on the numbers first
-            let result = operate(operation.operator,operation.num1, operation.num2);
-            if (operatorClickedAgain > 1) {
-                cleanResult(result);
-                operation.num1 = "";
-                operatorClickedAgain = 1;
-            }
-            clearDisplay = true;
-            getOperator(e);
-            getNumbersForCalculation();
-            displayOperation();
-        });
+        button.addEventListener('click', operatorEventLoop);
     });
     equals.addEventListener('click', function() { 
         getNumbersForCalculation();
@@ -104,6 +91,29 @@ function setButtonListeners() {
     })
 }
 
+function getKeyboardInputs(e) {
+    //Allows you to populate display by typing numbers
+    if (e.key === "0" || Number(e.key) || e.key === ".") {
+        currentDigit = e.key;
+        displayNumber(currentDigit);
+    }
+    else if (e.key === "Enter") {
+        getNumbersForCalculation();
+        equalsButton();
+    }
+    else if (e.key === "Backspace") {
+        backspaceButton();
+    }
+    else if (e.key === "c") {
+        clearButton();
+    }
+    else if (e.key === "+" || e.key === "-" || e.key === "/"|| e.key === "*" || e.key === "^" || e.key === "√") {
+        operatorEventLoop(e);
+    }
+    else {
+        return;
+    }
+}
 //gets number from button clicked and returns the value
 function getNumberFromButton(e) {
     currentDigit = e.target.textContent;
@@ -152,6 +162,26 @@ function displayNumber(number) {
 //gets current operator from button clicked and stores the current display value
 function getOperator(e) {
     operation.operator = e.target.getAttribute('id');
+    switch (e.key) {
+        case "+":
+            operation.operator = "add";
+            break;
+        case "-":
+            operation.operator = "subtract";
+            break;
+        case "/":
+            operation.operator = "divide";
+            break;
+        case "*":
+            operation.operator = "multiply";
+            break;
+        case "^":
+            operation.operator = "power";
+            break;
+        case "√":
+            operation.operator = "square-root";
+            break;
+    }
 }
 
 function getNumbersForCalculation() {
@@ -185,6 +215,22 @@ function displayOperation() {
             currentOperation.textContent = `SQRT(${operation.num1})`;
             break;
     }
+}
+
+function operatorEventLoop(e) {
+    operatorClickedAgain++;
+    getNumbersForCalculation();
+    //if operator is clicked more than once, operate on the numbers first
+    let result = operate(operation.operator,operation.num1, operation.num2);
+    if (operatorClickedAgain > 1) {
+        cleanResult(result);
+        operation.num1 = "";
+        operatorClickedAgain = 1;
+    }
+    clearDisplay = true;
+    getOperator(e);
+    getNumbersForCalculation();
+    displayOperation();
 }
 
 //function to make the equals button work
