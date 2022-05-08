@@ -91,6 +91,7 @@ function setButtonListeners() {
     })
 }
 
+//function for getting keyboard inputs and implementing the correct logic
 function getKeyboardInputs(e) {
     //Allows you to populate display by typing numbers
     if (e.key === "0" || Number(e.key) || e.key === ".") {
@@ -159,7 +160,7 @@ function displayNumber(number) {
     clearDisplay = false;
 }
 
-//gets current operator from button clicked and stores the current display value
+//gets current operator from button clicked or key pressed and stores the current display value
 function getOperator(e) {
     operation.operator = e.target.getAttribute('id');
     switch (e.key) {
@@ -184,6 +185,7 @@ function getOperator(e) {
     }
 }
 
+//Sets the values for num1 and num2
 function getNumbersForCalculation() {
     if (operation.num1 === "") {
         operation.num1 = parseFloat(display.textContent);
@@ -217,6 +219,7 @@ function displayOperation() {
     }
 }
 
+//function to handle the logic implemented when an operator button is clicked or pressed
 function operatorEventLoop(e) {
     operatorClickedAgain++;
     getNumbersForCalculation();
@@ -257,8 +260,16 @@ function equalsButton() {
 function cleanResult(result) {
     //Rounds decimals to 7 digits
     if (result.toString().includes('.') && result.toString().length >= 10) {
-        display.textContent = result.toFixed(7);
-        operation.num1 = result.toFixed(7);
+        let largeNumberwithDecimal = result.toString().split(".");
+        //rounds down even more if first half of the number is too large for screen
+        if (largeNumberwithDecimal[0].length >=3) {
+            display.textContent = result.toFixed(3);
+            operation.num1 = result.toFixed(3);
+        }
+        else {
+            display.textContent = result.toFixed(7);
+            operation.num1 = result.toFixed(7);
+        }
     }
     //Displays large numbers in scientific notation
     else if (result.toString().length >= 10) {
