@@ -193,14 +193,14 @@ function equalsButton() {
     clearDisplay = true;
     currentOperation.textContent = "";
     displayOperation();
-    //Displays slightly differently for square root
-    if (operation.operator != "square-root") {
-        currentOperation.textContent += `${operation.num2} =`;
-    }
     let result = operate(operation.operator,operation.num1, operation.num2);
     //if equals button is clicked before an operator has, do nothing
     if (typeof result == 'undefined') {
         return;
+    }
+    //Displays slightly differently for square root
+    if (operation.operator != "square-root") {
+        currentOperation.textContent += `${operation.num2} =`;
     }
     cleanResult(result);
     operation.num1 = "";
